@@ -273,7 +273,7 @@ To start the scenario, the participants need specific files to begin their inves
 2.  **Intelligence Key:** `handout-and-keys/joe_doe_public.asc`.
     * *Context:* This key represents intelligence found on a suspect's device in a prior case, which is necessary to verify the final attribution.
 
-** WARNING:** Do NOT give students the private keys (`*.private.asc`) or the `Phoenix_pub_SIGNED.asc` directly. They must discover the public key on the internal blog server during their investigation to prove they successfully pivoted through the network.
+** WARNING:** Do NOT give students the private keys (`*_private.asc`) or the `Phoenix_public.asc` directly. They must discover the public key on the internal blog server during their investigation to prove they successfully pivoted through the network.
 
 
 
