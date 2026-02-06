@@ -1,0 +1,6 @@
+Flask==3.1.0
+Flask_Caching==2.3.1
+flask_wtf==1.2.2
+Pillow==11.2.1
+gunicorn==23.0.0
+nh3==0.2.21

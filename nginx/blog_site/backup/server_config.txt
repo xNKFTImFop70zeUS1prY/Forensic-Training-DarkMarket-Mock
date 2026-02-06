@@ -1,0 +1,25 @@
+# Server Configuration Notes
+# Last updated: April 15, 2025
+
+HOME SERVER:
+- Internal IP: 192.168.1.5
+- External domain: home.XXXXX.net
+- SSH port: 2222 (non-standard)
+- Key location: ~/.ssh/homeserver_ed25519
+- Admin user: rob
+
+VPS DETAILS:
+- Provider: DigitalOcean
+- Region: nyc1
+- IP: 143.198.xx.xx (redacted)
+- Basic monitoring enabled
+- Docker containers for:
+  - Personal website (Ghost)
+  - Gitea
+  - Uptime monitoring
+  - Backup system
+
+REMEMBER:
+- Change backup rotation schedule
+- Update DNS records after move
+- Transfer domain before May renewal

@@ -1,0 +1,19 @@
+SocksPort 0  # Disable socks proxy
+ControlPort 0  # Disable control port for security
+RunAsDaemon 0
+Log notice stdout
+
+# Hidden Service 1 (HTTP)
+HiddenServiceDir /etc/tor/hidden_services/1
+HiddenServicePort 80 172.20.0.3:7000
+HiddenServiceExportCircuitID haproxy
+
+# Hidden Service 2 (HTTP)
+HiddenServiceDir /etc/tor/hidden_services/2
+HiddenServicePort 80 172.20.0.3:7000
+HiddenServiceExportCircuitID haproxy
+
+# Hidden Service 3 (SSH)
+HiddenServiceDir /etc/tor/hidden_services/3
+HiddenServicePort 22 172.20.0.3:2222
+HiddenServicePort 80 172.20.0.3:7001

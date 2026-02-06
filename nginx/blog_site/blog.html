@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phoenix's Tech Journal | Homelab & Programming Notes</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0 auto; max-width: 800px; padding: 20px; }
+        h1 { border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+        .entry { margin-bottom: 30px; }
+        .date { color: #666; font-style: italic; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        .personal { background-color: #ffffd0; padding: 15px; border-radius: 5px; }
+        .technical { background-color: #e8f4ff; padding: 15px; border-radius: 5px; }
+        .download-link {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .download-link:hover {
+            background-color: #45a049;
+        }
+        .security-note {
+            border-left: 4px solid #4CAF50;
+            padding-left: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Phoenix's Tech Journal</h1>
+    <p>Documenting my adventures in homelabbing, programming, and occasional travels - based in Munich, Germany.</p>
+    
+    <div class="entry technical">
+        <h2>Homelab Updates: New Proxmox Cluster</h2>
+        <div class="date">April 15, 2025</div>
+        <p>Finally got my expanded homelab cluster working with Proxmox! After months of collecting hardware, I've upgraded from my previous shoe-shelf setup to a proper 12U rack. The power bill might kill me, but it's worth it for the learning experience.</p>
+        <p>Current setup:</p>
+        <ul>
+            <li>3× Dell R720 (32GB RAM each, 2× E5-2650v2)</li>
+            <li>Synology DS920+ (16GB RAM, 4× 8TB WD Reds in SHR)</li>
+            <li>FritzBox 7590 as main router</li>
+            <li>Raspberry Pi cluster (3× Pi 4 8GB) for lightweight services</li>
+            <li>APC Smart-UPS 1500VA</li>
+        </ul>
+        <p>Unlike my previous network setup where I was using Pihole on a single Pi, I've now containerized most services and deployed them across the cluster for redundancy. The biggest challenge was setting up proper networking across all nodes:</p>
+        <pre>
+# Example of my network config for the load balancing
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eno1:
+      dhcp4: no
+      addresses: [192.168.1.30/24]
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses: [192.168.1.53, 1.1.1.1]</pre>
+        <p>Next project: Setting up TrueNAS Scale on one of the nodes as a dedicated storage solution.</p>
+    </div>
+    
+    <div class="entry">
+        <h2>Experimenting with Phoenix LiveView</h2>
+        <div class="date">April 2, 2025</div>
+        <p>Been diving into Elixir's Phoenix framework lately, specifically LiveView. After years of React development, the simplicity of building reactive applications without tons of JavaScript is refreshing.</p>
+        <p>Here's a simple counter component I built to test performance:</p>
+        <pre>
+defmodule DemoWeb.CounterLive do
+  use Phoenix.LiveView
+
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, count: 0)}
+  end
+
+  def render(assigns) do
+    ~H"""
+    &lt;div&gt;
+      &lt;h1&gt;Count: <%= @count %>&lt;/h1&gt;
+      &lt;button phx-click="increment"&gt;+&lt;/button&gt;
+      &lt;button phx-click="decrement"&gt;-&lt;/button&gt;
+      &lt;button phx-click="reset"&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+    """
+  end
+
+  def handle_event("increment", _, socket) do
+    {:noreply, update(socket, :count, &(&1 + 1))}
+  end
+
+  def handle_event("decrement", _, socket) do
+    {:noreply, update(socket, :count, &(&1 - 1))}
+  end
+
+  def handle_event("reset", _, socket) do
+    {:noreply, assign(socket, count: 0)}
+  end
+end</pre>
+        <p>Planning to use this for a monitoring dashboard for my homelab. Phoenix's lightweight nature means I can run it on one of my Raspberry Pis without issue.</p>
+    </div>
+    
+    <div class="entry personal">
+        <h2>Upcoming Trip to Phoenix</h2>
+        <div class="date">March 26, 2025</div>
+        <p>Personal note: I'll be traveling to Phoenix, Arizona next month for a 2-week work assignment. This will be my third visit in the past 18 months, and I'm looking forward to escaping the German spring rain for some desert sunshine.</p>
+        <p>Need to remember to backup my homelab before leaving - last time I had an unexpected power outage while away and came home to a corrupted ZFS pool. Not making that mistake again.</p>
+        <p>If any fellow tech enthusiasts in the Phoenix area want to meet up, shoot me an email at phoenix@securemail.netli or message me on Matrix.</p>
+    </div>
+
+    <div class="entry">
+        <h2>Updated PGP Key Setup with Subkeys</h2>
+        <div class="date">March 10, 2025</div>
+        <p>Finally got around to reorganizing my PGP setup with proper subkeys and separation of signing, encryption, and authentication functions. This is much more secure than my previous single-key approach.</p>
+        
+        <div class="security-note">
+            <p>I'm now using a designated signing subkey for my open source contributions and a separate encryption subkey for secure communications. The master key remains offline on an air-gapped system.</p>
+            <p>For travel security (especially when heading to the US), I'm using a temporary travel key set that's linked to my main identity but can be revoked without compromising my primary keys.</p>
+            <p>For convenience reasons, I don't display the full key here, but you can download it here:</p>
+            <a href="Phoenix_pub.asc" class="download-link">Download PGP Public Key</a>
+        </div>
+        
+        <p>I've also set up a YubiKey for handling my authentication subkey, which makes the daily usage much more convenient while still maintaining solid security. I'm considering writing a detailed guide on setting up PGP with hardware tokens if anyone's interested.</p>
+    </div>
+</body>
+</html>

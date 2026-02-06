@@ -1,0 +1,27 @@
+# Basic SSH configuration
+Port 2222
+Protocol 2
+PermitRootLogin no
+PubkeyAuthentication no
+PasswordAuthentication yes
+MaxAuthTries 3
+
+# Global restrictions
+X11Forwarding no
+PermitTunnel no
+GatewayPorts no
+AllowAgentForwarding no
+MaxSessions 10
+ClientAliveInterval 60
+ClientAliveCountMax 3
+
+# Proxy user specific rules
+Match User dreadpiraterobertsfree
+  AllowTcpForwarding yes
+  X11Forwarding no
+  PermitTunnel no
+  GatewayPorts no
+  AllowAgentForwarding no
+  # Only allow connections to specific nginx ports
+  PermitOpen any
+  ForceCommand echo "This account can only be used for port forwarding"

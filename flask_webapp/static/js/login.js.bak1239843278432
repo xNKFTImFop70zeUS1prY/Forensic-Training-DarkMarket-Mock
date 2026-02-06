@@ -1,0 +1,40 @@
+// In login.js
+document.addEventListener('DOMContentLoaded', function() {
+    const refreshButton = document.getElementById('refresh-captcha-btn');
+    if (refreshButton) {
+        refreshButton.addEventListener('click', refreshCaptcha);
+    }
+
+    function refreshCaptcha() {
+        // Add timestamp to prevent caching
+        const timestamp = new Date().getTime();
+
+        fetch('/refresh-captcha?type=login&_=' + timestamp, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Cache-Control': 'no-cache'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Force browser to reload the image by creating a new timestamp
+                    const captchaImg = document.getElementById('captcha-image');
+                    captchaImg.src = data.image; // For data URLs, we don't need additional parameters
+                    document.getElementById('captcha-text').value = '';
+                } else {
+                    console.error('Failed to refresh captcha');
+                }
+            })
+            .catch(error => {
+                console.error('Error refreshing CAPTCHA:', error);
+            });
+    }}
+);
+
+

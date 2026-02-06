@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rob's Dev Journal</title>
+    <style>
+        body { font-family: 'Courier New', monospace; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #1a1a1a; color: #c0c0c0; }
+        h1 { color: #4CAF50; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        .post { margin-bottom: 40px; background: #252525; padding: 20px; border-radius: 5px; }
+        code { color: #9CCC65; background: #000; padding: 2px 5px; }
+        .warning { color: #FF7043; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <h1>Rob's Development Log</h1>
+
+    <div class="post">
+        <h2>Kubernetes CI/CD Pipeline Setup</h2>
+        <div class="date">2025-04-18</div>
+        <p>Finally automated deployment to the home cluster (<code>192.168.1.5:6443</code>). 
+        Using ArgoCD for GitOps synchronization. Configuration snippet:</p>
+        <pre>
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: home-server
+spec:
+  destination:
+    server: https://192.168.1.5:6443
+    namespace: default
+  source:
+    path: kustomize/
+    repoURL: git@github.netli:rob-devops/home-cluster.git
+        </pre>
+        <p class="warning">⚠️ Remember to rotate cluster credentials every 90 days!</p>
+    </div>
+
+    <div class="post">
+        <h2>Rust Memory Safety Deep Dive</h2>
+        <div class="date">2025-04-15</div>
+        <p>Exploring Rust's borrow checker with a simple file parser:</p>
+        <pre>
+use std::fs::File;
+use std::io::{BufReader, Read};
+
+fn parse_config(path: &str) -> Result<String, std::io::Error> {
+    let file = File::open(path)?; // /home/rob/backups/server.conf
+    let mut reader = BufReader::new(file);
+    let mut contents = String::new();
+    reader.read_to_string(&mut contents)?;
+    Ok(contents)
+}
+        </pre>
+        <p>Next challenge: Implementing async I/O with Tokio.</p>
+    </div>
+
+    <div class="post">
+        <h2>Home Server Upgrade Checklist</h2>
+        <div class="date">2025-04-10</div>
+        <ul>
+            <li>Migrate Docker volumes to new SSD array</li>
+            <li>Update Let's Encrypt certificates for *.robsprojects.netli</li>
+            <li>Test failover to backup VPS (68.183.201.47)</li>
+            <li>Rotate SSH keys for deployment user</li>
+        </ul>
+    </div>
+
+    <!-- Hidden content for vulnerability testing -->
+    <div class="hidden">
+        <p>Temporary backup location: <a href="/j5q8vt_backup">Migration Files</a></p>
+        <p>Old configs: <a href="/config_archive">Archive</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarkMarket - High Traffic Mode</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: "Courier New", monospace;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #1a1a1a;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            position: relative;
+        }
+        h1, h2, h3 {
+            color: #00ff00;
+        }
+        .forum-title {
+            text-align: center;
+            font-size: 26px;
+            letter-spacing: 2px;
+        }
+        .status-bar {
+            background-color: #1a1a1a;
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+        .warning {
+            color: #ff3333;
+            font-weight: bold;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(0, 255, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: #00ff00;
+            animation: spin 1s ease-in-out infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .status-online {
+            background-color: #00ff00;
+        }
+        .status-warning {
+            background-color: #FFA500;
+        }
+        .status-offline {
+            background-color: #ff0000;
+        }
+        .market-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .stat {
+            background-color: #1a1a1a;
+            padding: 15px;
+            text-align: center;
+            flex: 1;
+            margin: 5px;
+            border: 1px solid #333;
+            min-width: 120px;
+        }
+        .stat-value {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .pgp {
+            background-color: #1a1a1a;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 20px;
+            border: 1px solid #333;
+            overflow-x: auto;
+        }
+        .status-message {
+            border-left: 3px solid #444;
+            padding-left: 10px;
+            margin: 15px 0;
+        }
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background-color: #00ff00;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .mirror-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .mirror-list li {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+        .mirror-url {
+            font-weight: bold;
+            color: #00bbff;
+        }
+        .progress-container {
+            background-color: #1a1a1a;
+            height: 20px;
+            width: 100%;
+            border-radius: 4px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background-color: #006600;
+            height: 100%;
+            width: 15%;
+            border-radius: 4px;
+            animation: progress 120s linear infinite;
+        }
+        @keyframes progress {
+            0% { width: 15%; }
+            100% { width: 95%; }
+        }
+        .pgp-verification {
+            margin-top: 25px;
+            background-color: #1a1a1a;
+            padding: 15px;
+            border: 1px solid #333;
+        }
+        .pgp-title {
+            color: #00ff00;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .pgp-message {
+            background-color: #0a0a0a;
+            padding: 10px;
+            border: 1px solid #333;
+            color: #ccc;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .verification-info {
+            color: #999;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="forum-title">DarkMarket || System Overload</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="status-bar">
+            <span><span class="loading-spinner"></span> System status: <strong>DEGRADED PERFORMANCE</strong></span>
+            <span style="float: right;">Circuit ID: <strong>B49F3C7D</strong></span>
+        </div>
+
+        <div style="background-color: #1a1a1a; padding: 20px; border: 1px solid #333; margin-bottom: 20px;">
+            <h2><span class="warning">⚠️ HIGH TRAFFIC MODE ACTIVATED</span></h2>
+            
+            <p>Our Tor circuits are experiencing <strong>unprecedented traffic</strong> due to multiple entry node failures and coordinated attacks on our infrastructure.</p>
+            
+            <div class="status-message">
+                <p><span class="loading-spinner"></span> [SYSTEM]: Implementing circuit isolation protocol...</p>
+                <p><span class="loading-spinner"></span> [SYSTEM]: Rerouting through fallback relays...</p>
+                <p><span class="loading-spinner"></span> [SYSTEM]: Captcha verification queued (#452 in line)</p>
+                <p><span class="loading-spinner"></span> [SYSTEM]: Wait time approximately 15-45 minutes</p>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+            
+            <p class="warning">DO NOT REFRESH OR YOU WILL LOSE YOUR POSITION IN QUEUE</p>
+
+            <div class="market-stats">
+                <div class="stat">
+                    <div class="stat-value">4,582</div>
+                    <div>Active Listings</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">972</div>
+                    <div>Vendors</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">99.3%</div>
+                    <div>Uptime</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">0.007</div>
+                    <div>BTC/trans fee</div>
+                </div>
+            </div>
+            
+            <div class="pgp-verification">
+                <div class="pgp-title">
+                    <span class="loading-spinner"></span>
+                    <h3 style="margin: 0 0 0 10px;">VERIFIED SYSTEM ANNOUNCEMENT</h3>
+                </div>
+                <div class="pgp-message">
+<pre>-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+IMPORTANT SYSTEM ANNOUNCEMENT
+
+DarkMarket will be undergoing scheduled maintenance immediatly.
+During this period, the following services will be affected:
+
+- - Vendor areas will be in read-only mode
+- - New orders will be queued but not processed
+- - Escrow withdrawals will be paused
+- - Bitcoin deposits will continue to function normally
+
+This maintenance is to implement additional security measures following the recent takedown 
+of competing markets. We are enhancing entry node protection and implementing additional
+layered encryption for all communications.
+
+SECURITY REMINDER:
+1. Always verify PGP signatures before accessing any market mirror
+2. Our staff will NEVER ask for your password or private keys
+3. Enable 2FA on your account if you havent already
+4. Do not use the same password across multiple markets
+
+Your security is our priority.
+
+- - DarkMarket Administration Team
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEESjji9Yvi7rg6mEUYkrGkIP2FoJsFAmgDAmwACgkQkrGkIP2F
+oJvSsQ/+KPoJ1wdgmkglK7jgSxy18SCTrp0G5FBgIxOhGuULfcIRbgruJPJDs/zi
+bBN6mr64/LR/vYBx4VkXoRDNkelM1easWxXnWrBKChxnWWimh/tGVHLlG+r/kBDm
+aX7HKz6gFVbJJ2p+Gx/i5HUoqjuuazsfAZcc7ebJCUV0vUgi8rcJw4nzm71mbUtF
+lQ3t9T/1xS8pShZeNzaEpDq+GdlBJgslawvcKZbLnh/xW0RNfmBHPRaDjO5qORcV
+fLIx1vXtN2DSSOQxlt9mFdnsJKjGc7b4m28umnAiO1oterBzdiEAxXwuP5Arwrgm
+P7Ie8J7lb3TjXBfW/SF4IdlLRhU+m0PcAwLswBACr4PeN/4ABJ7nB37Ei66yXFn1
+nUxITwKZesDBMhKae5/Lp7IZUes35KLjNRhmeJ1JQgXffvw0H/IIqZOqdYGR591M
+kXjSUGXseJMA8sFX40H0Plub77XYXYRhVXUiXkiohstdvICNAFfvBoETK7T/VQPZ
+KV3diBZ2pPaM6bxnAbvEqqGr7Qp+k5ArPxmF1GDG6Grf1v4OFcdsMo9QOFLyqVHr
+sex9AZhA9PpYgvgJktFVt5eeRhquP1jreWhqYhchPKlSw16lvIJcgD9lY62Q7zKd
+M5rjVQBn764KlFR7UnyIOHNMgcFu5V9H38r3iGffEeBpDUcDarU=
+=0DcH
+-----END PGP SIGNATURE-----</pre>
+                </div>
+                <div class="verification-info">
+                    <p>Verification: Signature valid</p>
+                    <p>Fingerprint: 9644 1DF9 B291 CB81 0CDB 6C9E F9FC 4F98 3FB8 8B12</p>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; font-size: 12px; color: #666;">
+            <p>DarkMarket | v2.4.7 | Circuit protection active | <span class="terminal-cursor"></span></p>
+        </div>
+    </div>
+</body>
+</html>

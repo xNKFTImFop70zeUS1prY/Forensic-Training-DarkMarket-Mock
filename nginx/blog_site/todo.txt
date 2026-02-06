@@ -1,0 +1,6 @@
+TODO:
+- Fix SSL cert renewal script
+- Update home server to Ubuntu 24.04
+- Research local tech meetups
+- Move VPS to new provider (current expires May 15)
+- Backup GPG keys to new USB

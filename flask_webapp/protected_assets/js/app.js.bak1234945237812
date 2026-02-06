@@ -1,0 +1,197 @@
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all tab elements
+        const tabs = document.querySelectorAll('.tab');
+
+        // Add click event listener to each tab
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(event) {
+                // Get the tab name from data attribute
+                const tabName = this.getAttribute('data-tab');
+                openTab(event, tabName);
+            });
+        });
+    });
+
+
+    // Tab switching functionality
+    function openTab(evt, tabName) {
+        const tabContents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].classList.remove("active");
+        }
+
+        const tabs = document.getElementsByClassName("tab");
+        for (let i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove("active");
+        }
+
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+
+    // Set up admin authentication
+    // Handle admin login form
+    document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const submitBtn = this.querySelector('button[type="submit"]');
+
+        // Add browser fingerprint to form data
+        const fingerprint = generateFingerprint();
+        formData.append('browser_fingerprint', fingerprint);
+
+        // Update UI to loading state
+        submitBtn.innerHTML = '<span class="loading-spinner"></span> Authenticating...';
+        submitBtn.disabled = true;
+        document.getElementById('login-error').style.display = 'none';
+
+        fetch('/admin/auth', {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const errorDisplay = document.getElementById('login-error');
+                errorDisplay.style.display = 'block';
+                errorDisplay.textContent = data.message;
+
+                if (data.lockout) {
+                    // Show lockout message with timer
+                    startLockoutTimer(data.lockout_seconds);
+                } else {
+                    // Reset the form state
+                    submitBtn.textContent = 'Authenticate';
+                    submitBtn.disabled = false;
+                    document.getElementById('admin-password').value = '';
+
+                    // Update the fingerprint display directly without page reload
+                    const fingerprintElement = document.querySelector('.login-stats p:nth-child(2)');
+                    if (fingerprintElement) {
+                        fingerprintElement.textContent = 'Client fingerprint: ' + fingerprint;
+                    }
+
+                    const lastLoginElement = document.querySelector('.login-stats p:nth-child(1)');
+                    if (lastLoginElement) {
+                        // Extract the current username from the page header (ensures we use the logged-in user)
+                        const currentUserElement = document.querySelector('.user-info');
+                        let username = "Unknown";
+
+                        if (currentUserElement && currentUserElement.textContent) {
+                            // Extract just the username from "Logged in as: Username"
+                            const match = currentUserElement.textContent.match(/Logged in as: (.+)/);
+                            if (match && match[1]) {
+                                username = match[1];
+                            }
+                        }
+
+                        // Get current time and format it
+                        const now = new Date();
+                        const minutes = now.getMinutes() % 10;
+
+                        // Update the text
+                        lastLoginElement.textContent = 'Last login attempt: ' + minutes + ' minutes ago by ' + username;
+                    }
+
+
+                    // Refresh the page to update last login info
+                    if (data.should_refresh) {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500); // Wait 1.5 seconds so the user can read the error
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Auth error:', error);
+                const errorDisplay = document.getElementById('login-error');
+                errorDisplay.style.display = 'block';
+                errorDisplay.textContent = 'Connection error: The server is not responding. Try again later.';
+                submitBtn.textContent = 'Authenticate';
+                submitBtn.disabled = false;
+            });
+    });
+
+
+    // Generate browser fingerprint (security feature)
+    function generateFingerprint() {
+        const screen = window.screen;
+        const nav = window.navigator;
+
+        // Create a human-readable fingerprint
+        const browserInfo = nav.userAgent.split(' ').slice(-1)[0] || 'Unknown';
+        const screenRes = `${screen.width}x${screen.height}`;
+        const colorDepth = `${screen.colorDepth}bit`;
+        const timezone = `UTC${new Date().getTimezoneOffset() / -60 > 0 ? '+' : ''}${new Date().getTimezoneOffset() / -60}`;
+        const lang = nav.language || nav.userLanguage || nav.browserLanguage || nav.systemLanguage || 'Unknown';
+
+        // Return a readable format
+        return `${browserInfo} | ${screenRes} | ${colorDepth} | ${timezone} | ${lang}`;
+    }
+
+    // PGP verification toggle functions
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get references to elements
+        const pgpToggleHeader = document.getElementById('pgp-verification-toggle');
+        const pgpContent = document.getElementById('pgp-verification-content');
+        const showKeyBtn = document.getElementById('show-key-btn');
+        const adminPgpKey = document.getElementById('admin-pgp-key');
+
+        // Don't add 'hidden' class here since CSS already hides the element with display: none
+
+        // Add event listeners
+        if (pgpToggleHeader) {
+            pgpToggleHeader.addEventListener('click', function() {
+                // Use direct style manipulation since we have existing CSS rules
+                if (pgpContent.style.display === 'block') {
+                    pgpContent.style.display = 'none';
+                    document.querySelector('.toggle-icon').textContent = '+';
+                } else {
+                    pgpContent.style.display = 'block';
+                    document.querySelector('.toggle-icon').textContent = '-';
+                }
+            });
+        }
+
+        if (showKeyBtn && adminPgpKey) {
+            // Apply initial state
+            adminPgpKey.style.display = 'none';
+
+            showKeyBtn.addEventListener('click', function() {
+                if (adminPgpKey.style.display === 'block') {
+                    adminPgpKey.style.display = 'none';
+                    showKeyBtn.textContent = 'Show Admin PGP Key';
+                } else {
+                    adminPgpKey.style.display = 'block';
+                    showKeyBtn.textContent = 'Hide Admin PGP Key';
+                }
+            });
+        }
+    });
+
+
+    // Lockout timer functionality
+    // Updated Lockout timer functionality
+    function startLockoutTimer(seconds) {
+        const submitBtn = document.querySelector('#admin-login-form button[type="submit"]');
+        const errorDisplay = document.getElementById('login-error');
+        const originalText = 'Authenticate';
+        let remainingTime = seconds;
+
+        errorDisplay.innerHTML += '<br><span style="color: #aaa; font-size: 12px;">(Account will unlock after ' + Math.ceil(seconds/60) + ' minutes)</span>';
+
+        const timer = setInterval(() => {
+            remainingTime--;
+            submitBtn.textContent = `Locked (${remainingTime}s)`;
+
+            if (remainingTime <= 0) {
+                clearInterval(timer);
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }, 1000);
+    }

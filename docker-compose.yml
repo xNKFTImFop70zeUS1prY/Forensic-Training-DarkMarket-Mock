@@ -1,0 +1,101 @@
+## docker-compose.yml
+
+services:
+  tor:
+    build: ./tor
+    networks:
+      external_net:
+        ipv4_address: 172.19.0.2
+      tor_net:
+        ipv4_address: 172.20.0.2
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+
+  nginx:
+    build: ./nginx
+    networks:
+      tor_net:
+        ipv4_address: 172.20.0.3
+      flask_net:
+        ipv4_address: 172.21.0.2
+      ssh_net:
+        ipv4_address: 172.22.0.2
+    depends_on:
+      - tor
+      - flaskapp
+      - sshcontainer
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN                           
+      - DAC_OVERRIDE                    # Allows bypassing file read/write/execute permission checks
+      - SETGID                          # Add this to fix the setgid error
+      - SETUID                          # Add this to fix the setgid error
+    restart: unless-stopped
+
+  flaskapp:
+    build: ./flask_webapp
+    networks:
+      flask_net:
+        ipv4_address: 172.21.0.3
+    security_opt:
+      - seccomp:unconfined
+    read_only: true
+    tmpfs:
+      - /tmp  # Allows writing to /tmp
+    cap_drop:
+      - ALL
+    environment:
+      TMPDIR: /tmp
+    restart: unless-stopped
+
+  sshcontainer:
+    build: ./ssh-container
+    networks:
+      ssh_net:
+        ipv4_address: 172.22.0.3
+    # No special capabilities needed!
+    cap_drop:
+      - ALL
+    cap_add:
+      - SYS_CHROOT    # Add this capability to allow chroot operations
+      - SETGID        # Required for setting group IDs
+      - SETUID        # Required for setting user IDs
+      - CHOWN
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    restart: unless-stopped
+    
+networks:
+  external_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/24
+
+  tor_net:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+  flask_net:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24
+
+  ssh_net:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.22.0.0/24

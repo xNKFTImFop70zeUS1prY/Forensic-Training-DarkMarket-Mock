@@ -1,0 +1,99 @@
+body {
+    background-color: #121212;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.login-container {
+    background-color: #1a1a1a;
+    padding: 30px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    width: 350px;
+}
+h1 {
+    color: #00ff00;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    box-sizing: border-box;
+}
+button {
+    background-color: #006600;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 10px;
+}
+button:hover {
+    background-color: #008800;
+}
+.flash-messages {
+    background-color: #330000;
+    color: #ff3333;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #660000;
+    border-radius: 4px;
+}
+.info-text {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    margin-top: 20px;
+}
+.captcha-container {
+    background-color: #1e1e1e;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    border: 1px solid #333;
+}
+.captcha-title {
+    color: #00ff00;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.captcha-image {
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid #444;
+}
+.refresh-captcha {
+    background-color: #333;
+    color: #00ff00;
+    border: 1px solid #444;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 5px 10px;
+    display: block;
+    margin: 10px 0;
+    width: 100%;
+    text-align: center;
+}
+.refresh-captcha:hover {
+    background-color: #444;
+}
