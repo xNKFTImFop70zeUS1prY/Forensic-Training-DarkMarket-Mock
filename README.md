@@ -8,6 +8,14 @@
 
 This repository contains a comprehensive Docker Compose setup that simulates a darknet market environment for educational and security testing purposes. The system implements a multi-container architecture with network isolation, simulated vulnerabilities, and realistic darknet market aesthetics.
 
+## 🎓 Research Context
+
+This repository is the official artifact for:  
+**From Dockets to Docker: Engineering Realistic Forensic Scenarios for Onion Service Investigations**
+
+The forensic scenario presented in this environment is engineered from real-world failure patterns extracted from court cases. To identify these vulnerabilities, we utilized an established codebook as a foundational guide to extract relevant investigative quotes. These operational traces were then collaboratively analyzed, discussed, and abstracted by two independent coders to design the final simulation. The foundational codebook used to initiate this qualitative analysis is provided below:
+> 📄 **[Codebook: Investigative Methods (PDF)](./supplementary_material/codebook-investigative-methods.pdf)**
+
 ## System Architecture
 
 The environment consists of four primary containers, each with specific roles:
@@ -213,7 +221,7 @@ You must pre-generate v3 Onion Service keys so the addresses are known before th
     ```
 3.  Run Tor briefly (approx. 10-15s) until bootstrapped (100%), then stop it (`Ctrl+C`):
     ```bash
-    tor -f /tmp/tor-gen/torrc
+    tor -f /tmp/tor-gen/torrc --SocksPort 0
     ```
 4.  **Copy the keys to the project:**
     ```bash
@@ -236,7 +244,7 @@ Now that you have the keys, you must update the configuration files and the stud
     ```
 
 2.  **Update Nginx Configs:**
-    Open `nginx/00_flapp.conf` and `nginx/01_timeout.conf`. Replace the placeholders `[ONION_SERVICE_X_ADDRESS]` with your actual generated addresses.
+    Open `nginx/http.d/00_flapp.conf` and `nginx/http.d/01_timeout.conf`. Replace the placeholders `[ONION_SERVICE_X_ADDRESS]` with your actual generated addresses.
 
 3.  **Update Flask Templates:**
     Open `flask_webapp/templates/index.html` (Mirror Links section). Replace the placeholders so the mirror links on the site point to your actual services.
@@ -273,7 +281,7 @@ To start the scenario, the participants need specific files to begin their inves
 2.  **Intelligence Key:** `handout-and-keys/joe_doe_public.asc`.
     * *Context:* This key represents intelligence found on a suspect's device in a prior case, which is necessary to verify the final attribution.
 
-** WARNING:** Do NOT give students the private keys (`*_private.asc`) or the `Phoenix_public.asc` directly. They must discover the public key on the internal blog server during their investigation to prove they successfully pivoted through the network.
+**WARNING:** Do NOT give students the private keys (`*_private.asc`) or the `Phoenix_public.asc` directly. They must discover the public key on the internal blog server during their investigation to prove they successfully pivoted through the network.
 
 
 
